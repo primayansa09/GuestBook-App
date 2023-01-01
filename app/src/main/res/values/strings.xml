@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Guest Book</string>
+    <string name="image">Image Back</string>
+    <string name="file">File</string>
+    <string name="home">Home</string>
+    <string name="data">Data</string>
+
+    <string-array name="Provinsi">
+        <item>DKI Jakarta</item>
+        <item>Depok</item>
+        <item>Jawa Tengah</item>
+        <item>Jawa Barat</item>
+        <item>Jawa Timur</item>
+    </string-array>
+</resources>
