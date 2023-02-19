@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginTop="32dp"
                 android:hint="Nama"
                 app:endIconMode="clear_text">
@@ -42,8 +42,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:maxLines="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:maxLength="100"
+                    android:fontFamily="@font/roboto_regular"
                     android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:hint="No Hp"
                 app:endIconMode="clear_text"
                 app:counterMaxLength="14">
@@ -68,8 +68,9 @@
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="1dp"
                     android:maxLines="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:maxLength="14"
+                    android:fontFamily="@font/roboto_regular"
                     android:inputType="phone"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,8 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Email"
                 app:endIconMode="clear_text">
 
@@ -92,8 +92,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:maxLines="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:maxLength="100"
+                    android:fontFamily="@font/roboto_regular"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,8 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Alamat"
                 app:endIconMode="clear_text">
 
@@ -116,8 +116,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:maxLines="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:maxLength="100"
+                    android:fontFamily="@font/roboto_regular"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,8 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginBottom="16dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_provinsi"
@@ -138,8 +138,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:inputType="none"
+                    android:fontFamily="@font/roboto_regular"
                     android:hint="Provinsi"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -151,8 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginBottom="16dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_kotaKabupaten"
@@ -161,8 +161,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:inputType="none"
+                    android:fontFamily="@font/roboto_regular"
                     android:hint="Kota/Kabupaten"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,8 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginBottom="16dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_kecamatan"
@@ -183,8 +183,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:inputType="none"
+                    android:fontFamily="@font/roboto_regular"
                     android:hint="Kecamatan"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -196,8 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginBottom="16dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_kelurahan"
@@ -206,8 +206,9 @@
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="1dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:inputType="none"
+                    android:fontFamily="@font/roboto_regular"
                     android:hint="Kelurahan"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -220,7 +221,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
-                android:layout_marginTop="25dp"
                 android:hint="Kode Pos"
                 app:endIconMode="clear_text">
 
@@ -232,15 +232,17 @@
                     android:layout_marginRight="1dp"
                     android:maxLines="1"
                     android:maxLength="100"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_regular"
                     android:inputType="number"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/btn_submit"
                 style="@style/Button"
                 android:layout_marginBottom="50dp"
-                android:padding="8dp"
-                android:text="Submit"
-                android:textSize="20sp"
+                android:text="@string/submit"
+                android:textAlignment="gravity"
                 android:fontFamily="@font/roboto_regular"
                 android:background="@drawable/shape_background"
                 android:textAllCaps="false"/>
@@ -248,5 +250,15 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/progressBarHome"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

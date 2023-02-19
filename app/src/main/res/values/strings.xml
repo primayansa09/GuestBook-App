@@ -4,6 +4,12 @@
     <string name="file">File</string>
     <string name="home">Home</string>
     <string name="data">Data</string>
+    <string name="submit">Submit</string>
+    <string name="profile">Profile</string>
+    <string name="nameUser">Wanda Primayansa</string>
+    <string name="provinsi">DKI Jakarta</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
 
     <string-array name="Provinsi">
         <item>DKI Jakarta</item>

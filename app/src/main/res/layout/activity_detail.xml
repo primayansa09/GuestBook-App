@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".DetailActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include android:id="@+id/toolbarDetail" layout="@layout/toolbar_detail"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_margin="30dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="8dp">
+
+                        <ImageView
+                            android:id="@+id/img_user"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/user_profile"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="80dp"
+                            android:contentDescription="Image User"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/name_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center"
+                            tools:text="@string/nameUser"/>
+
+                        <TextView
+                            android:id="@+id/provinsi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@color/txt_grey"
+                            android:layout_marginTop="8dp"
+                            android:layout_gravity="center"
+                            tools:text="@string/provinsi"/>
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp">
+
+                                <TextView
+                                    style="@style/TextContent"
+                                    android:text="@string/email"/>
+
+                                <TextView
+                                    android:id="@+id/email"
+                                    style="@style/TextContent"
+                                    android:maxLines="2"
+                                    android:maxEms="13"
+                                    android:autoSizeTextType="uniform"
+                                    tools:text="primayansa9wanda11@gmail.com"/>
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    style="@style/TextContent"
+                                    android:text="@string/phone"/>
+
+                                <TextView
+                                    android:id="@+id/phone"
+                                    style="@style/TextContent"
+                                    tools:text="089510257987"/>
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@drawable/shape_background_white"
+                android:elevation="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Info"
+                    android:textSize="18sp"/>
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_info"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Alamat"/>
+
+                            <TextView
+                                android:id="@+id/alamat"
+                                style="@style/TextContent"
+                                android:padding="16dp"
+                                android:maxLines="4"
+                                android:maxEms="12"
+                                tools:text="Jl Bendungan Melayu Gg.Candra 2 No 8B Rt 3 Rw 1"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Kabupaten"/>
+
+                            <TextView
+                                android:id="@+id/kabupaten_kota"
+                                style="@style/TextContent"
+                                tools:text="Jakarta Utara"/>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Kecamatan"/>
+
+                            <TextView
+                                android:id="@+id/kecamatan"
+                                style="@style/TextContent"
+                                tools:text="Koja"/>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Kelurahan"/>
+
+                            <TextView
+                                android:id="@+id/kelurahan"
+                                style="@style/TextContent"
+                                tools:text="Tugu Selatan"/>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Kode Pos"/>
+
+                            <TextView
+                                android:id="@+id/kodePos"
+                                style="@style/TextContent"
+                                tools:text="14260"/>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextContent"
+                                android:text="Kehadiran"/>
+
+                            <TextView
+                                android:id="@+id/kehadiran"
+                                style="@style/TextContent"
+                                tools:text="2022-12-20T23:34:00"/>
+
+                        </TableRow>
+
+                    </TableLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

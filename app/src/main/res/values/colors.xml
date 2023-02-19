@@ -10,6 +10,7 @@
     <color name="red">#FF1E00</color>
     <color name="orange">#FF4C29</color>
     <color name="grey">#434242</color>
+    <color name="txt_grey">#9E9D89</color>
 
     <color name="background">#F9F9F9</color>
     <color name="toolBar">#041C32</color>

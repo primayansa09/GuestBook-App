@@ -9,23 +9,6 @@ import java.sql.DriverManager;
 public class Const {
 
     public static Connection con;
-    public void setConnection(){
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            String ip = "192.168.1.6";
-            String ConnUrl = "jdbc:jtds:sqlserver://"+ip+"/instance=SQLServer:user=sa:password=sapassword:databasename=API_BukuAbsen";
-
-            Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
-
-            con = DriverManager.getConnection(ConnUrl);
-            Log.e("ASK","Connection Called");
-        }catch (Exception e){
-            Log.e("ASK","EXCEPTION" + e.getMessage());
-
-        }
-    }
-
    //Splash Screen
    public static final int DELAY_SPLASH_SCREEN = 3000;
 
@@ -34,5 +17,6 @@ public class Const {
    public static final String URL_KECAMATAN = "https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=";
    public static final String URL_KELURAHAN = "https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=";
    //API SQL SERVER
-    public  static final String URL_DATA = "http://localhost:8085/api/visitor";
+    public  static final String URL_DATA = "http://192.168.1.6:8085/api/visitor";
+    //http://192.168.1.5/api/visitor
 }

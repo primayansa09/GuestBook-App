@@ -1,266 +1,316 @@
 package com.example.guestbook;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.guestbook.API.APIConfigProvinsi;
+import com.example.guestbook.API.ApiConfig;
 import com.example.guestbook.databinding.ActivityHomeBinding;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.guestbook.model.KecamatanItem;
+import com.example.guestbook.model.KecamatanResponse;
+import com.example.guestbook.model.KelurahanItem;
+import com.example.guestbook.model.KelurahanResponse;
+import com.example.guestbook.model.KotaKabupatenItem;
+import com.example.guestbook.model.KotaResponse;
+import com.example.guestbook.model.ProvinsiItem;
+import com.example.guestbook.model.VisitorResponse;
+import com.example.guestbook.model.VisitorResultsItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private ActivityHomeBinding binding;
     private static final String TAG = MainActivity.class.getSimpleName();
+    private ProvinsiViewModel provinsiViewModel;
 
+    ArrayList<Integer> listIdProvinsi = new ArrayList<>();
     ArrayList<String> listNamaProvinsi = new ArrayList<>();
+    ArrayList<Integer> listIdKota = new ArrayList<>();
     ArrayList<String> listNamaKota = new ArrayList<>();
+    ArrayList<Integer> listIdKecamatan = new ArrayList<>();
     ArrayList<String> listNamaKecamatan = new ArrayList<>();
+    ArrayList<Integer> listIdKelurahan = new ArrayList<>();
     ArrayList<String> listNamaKelurahan = new ArrayList<>();
 
-    ArrayList<String> listIdProvinsi = new ArrayList<>();
-    ArrayList<String> listIdKota = new ArrayList<>();
-    ArrayList<String> listIdKecamatan = new ArrayList<>();
-    ArrayList<String> listIdKelurahan = new ArrayList<>();
+
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_home);
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
         binding.toolbar.btnDocument.setOnClickListener(this);
+        binding.btnSubmit.setOnClickListener(this);
 
-        getAllProvinsi();
+        provinsiViewModel = new ViewModelProvider(this).get(ProvinsiViewModel.class);
+        provinsiViewModel.getProvinsi().observe(this, provinsi ->{
+            if (provinsi != null){
+                setProvinsi(provinsi);
+            }
+        });
+        removeField();
+        showLoading(false);
     }
 
-    private void getAllProvinsi() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = Const.URL_PROVINSI;
-        client.get(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                String result = new String(responseBody);
-                Log.d(TAG, result);
-                listIdProvinsi.clear();
-                listNamaProvinsi.clear();
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONArray jsonArray = jsonObject.getJSONArray("provinsi");
-
-                    for (int i=0; i < jsonArray.length(); i++){
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        String Id = object.getString("id");
-                        String provinsi = object.getString("nama");
-                        listIdProvinsi.add(Id);
-                        listNamaProvinsi.add(provinsi);
+    private void postData(VisitorResultsItem visitorResultsItem) {
+        showLoading(true);
+       Call<VisitorResponse> client = ApiConfig.getApiService().postVisitors(visitorResultsItem);
+       client.enqueue(new Callback<VisitorResponse>() {
+           @Override
+           public void onResponse(Call<VisitorResponse> call, Response<VisitorResponse> response) {
+               showLoading(false);
+                if (response.isSuccessful()){
+                    if (response.body() != null){
+                        removeField();
+                        Toast toast = Toast.makeText(Home.this, "Save Berhasil", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
+                        toast.show();
+                    }else {
+                        Toast toast = Toast.makeText(Home.this, "Save Gagal", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
+                        toast.show();
                     }
-
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, listNamaProvinsi);
-                    binding.dropdownProvinsi.setAdapter(arrayAdapter);
-
-                    binding.dropdownProvinsi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                            showDataKota(listIdProvinsi.get(position));
-                        }
-                    });
-
-                }catch (Exception e){
-                    Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
                 }
-            }
+           }
 
+           @Override
+           public void onFailure(Call<VisitorResponse> call, Throwable t) {
+               showLoading(false);
+               Log.e(TAG, "onFailure: " + t.getMessage());
+               Toast toast = Toast.makeText(Home.this, "Save Gagal", Toast.LENGTH_SHORT);
+               toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
+               toast.show();
+           }
+       });
+    }
+
+    private void removeField() {
+        binding.txtInputEditTextNama.setText("");
+        binding.txtInputEditTextNoHp.setText("");
+        binding.txtInputEditTextEmail.setText("");
+        binding.txtInputEditTextAlamat.setText("");
+        binding.dropdownProvinsi.setText("");
+        binding.dropdownKotaKabupaten.setText("");
+        binding.dropdownKecamatan.setText("");
+        binding.dropdownKelurahan.setText("");
+        binding.txtInputEditTextKodePos.setText("");
+    }
+
+
+    private VisitorResultsItem createVisitor(){
+        VisitorResultsItem resultsItem = new VisitorResultsItem();
+        int kodePos = Integer.parseInt(binding.txtInputEditTextKodePos.getText().toString().trim());
+        resultsItem.setNama(binding.txtInputEditTextNama.getText().toString().trim());
+        resultsItem.setNoHp(binding.txtInputEditTextNoHp.getText().toString().trim());
+        resultsItem.setEmail(binding.txtInputEditTextEmail.getText().toString().trim());
+        resultsItem.setAlamat(binding.txtInputEditTextAlamat.getText().toString().trim());
+        resultsItem.setProvinsi(binding.dropdownProvinsi.getText().toString().trim());
+        resultsItem.setKotaKabupaten(binding.dropdownKotaKabupaten.getText().toString().trim());
+        resultsItem.setKecamatan(binding.dropdownKecamatan.getText().toString().trim());
+        resultsItem.setKelurahan(binding.dropdownKelurahan.getText().toString().trim());
+        resultsItem.setKodePos(kodePos);
+
+        return resultsItem;
+    }
+
+    private void setProvinsi(java.util.List<ProvinsiItem> provinsi) {
+        listNamaProvinsi.clear();
+        listIdProvinsi.clear();
+        for (ProvinsiItem response : provinsi){
+            listIdProvinsi.add(response.getId());
+            listNamaProvinsi.add(response.getNama());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, listNamaProvinsi);
+        binding.dropdownProvinsi.setAdapter(arrayAdapter);
+
+        binding.dropdownProvinsi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String errorMessage;
-                switch (statusCode) {
-                    case 401:
-                        errorMessage = statusCode + " : Bad Request";
-                        break;
-                    case 403:
-                        errorMessage = statusCode + " : Forbidden";
-                        break;
-                    case 404:
-                        errorMessage = statusCode + " : Not Found";
-                        break;
-                    default:
-                        errorMessage =  statusCode + " : " + error.getMessage();
-                        break;
-                }
-                Toast.makeText(Home.this, errorMessage, Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                showDataKota(listIdProvinsi.get(position));
             }
         });
     }
 
-    private void showDataKota(String id) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = Const.URL_KOTA + id;
-        client.get(url, new AsyncHttpResponseHandler() {
+    private void showDataKota(int id) {
+        Call<KotaResponse> client = APIConfigProvinsi.getApiService().getKota_Kabupaten(id);
+        client.enqueue(new Callback<KotaResponse>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
-                Log.d(TAG, result);
-                listNamaKota.clear();
-                listIdKota.clear();
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONArray jsonArray = jsonObject.getJSONArray("kota_kabupaten");
+            public void onResponse(Call<KotaResponse> call, retrofit2.Response<KotaResponse> response) {
+                if (response.isSuccessful()){
+                    if (response.body() != null){
+                        setKotaKabupaten(response.body().getKotaKabupaten());
 
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        String idKota = object.getString("id");
-                        String namaKota = object.getString("nama");
-                        listIdKota.add(idKota);
-                        listNamaKota.add(namaKota);
                     }
-
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item,
-                            listNamaKota);
-                    binding.dropdownKotaKabupaten.setAdapter(arrayAdapter);
-
-                    binding.dropdownKotaKabupaten.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                            showDataKecamatan(listIdKota.get(position));
-                        }
-                    });
-
-                }catch (Exception e){
-                    Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        });
-    }
-
-    private void showDataKecamatan(String id) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = Const.URL_KECAMATAN + id;
-        client.get(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                listIdKecamatan.clear();
-                listNamaKecamatan.clear();
-
-                String result = new String(responseBody);
-                Log.d(TAG, result);
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONArray jsonArray = jsonObject.getJSONArray("kecamatan");
-
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        String idKecamatan = object.getString("id");
-                        String namaKecamatan = object.getString("nama");
-
-                        listIdKecamatan.add(idKecamatan);
-                        listNamaKecamatan.add(namaKecamatan);
+                }else {
+                    if (response.body() != null){
+                        Log.e(TAG, "onFailure: " + response.body().getKotaKabupaten());
                     }
-
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item,
-                            listNamaKecamatan);
-                    binding.dropdownKecamatan.setAdapter(arrayAdapter);
-
-                    binding.dropdownKecamatan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                            showDataKelurahan(listIdKecamatan.get(position));
-                        }
-                    });
-
-                }catch (Exception e){
-                    Toast.makeText(Home.this, e.getMessage(),Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
                 }
-
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+            public void onFailure(Call<KotaResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
 
-    private void showDataKelurahan(String id) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = Const.URL_KELURAHAN + id;
-        client.get(url, new AsyncHttpResponseHandler() {
+    private void setKotaKabupaten(List<KotaKabupatenItem> kotaKabupaten) {
+        listNamaKota.clear();
+        listIdKota.clear();
+        for (KotaKabupatenItem response:kotaKabupaten) {
+            listIdKota.add(response.getId());
+            listNamaKota.add(response.getNama());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, listNamaKota);
+        binding.dropdownKotaKabupaten.setAdapter(arrayAdapter);
+
+        binding.dropdownKotaKabupaten.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                listIdKelurahan.clear();
-                listNamaKelurahan.clear();
-
-                String result = new String(responseBody);
-                Log.d(TAG, result);
-                try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        JSONArray jsonArray = jsonObject.getJSONArray("kelurahan");
-
-                        for (int i=0; i< jsonArray.length(); i++){
-                            JSONObject object = jsonArray.getJSONObject(i);
-                            String idKelurahan = object.getString("id");
-                            String namaKelurahan = object.getString("nama");
-
-                            listIdKelurahan.add(idKelurahan);
-                            listNamaKelurahan.add(namaKelurahan);
-                        }
-
-                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item,
-                                listNamaKelurahan);
-                        binding.dropdownKelurahan.setAdapter(arrayAdapter);
-                }catch (Exception e){
-                    Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                showDataKecamatan(listIdKota.get(position));
             }
         });
     }
 
+    private void showDataKecamatan(int id) {
+        Call<KecamatanResponse> client = APIConfigProvinsi.getApiService().getKecamatan(id);
+        client.enqueue(new Callback<KecamatanResponse>() {
+            @Override
+            public void onResponse(Call<KecamatanResponse> call, retrofit2.Response<KecamatanResponse> response) {
+                if (response.isSuccessful()){
+                    if(response.body() != null){
+                        setKecamatan(response.body().getKecamatan());
+                    }
+                }else {
+                    if (response.body() != null){
+                        Log.e(TAG, "onFailure: " + response.body().getKecamatan());
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<KecamatanResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void setKecamatan(List<KecamatanItem> kecamatan) {
+        listIdKecamatan.clear();
+        listNamaKecamatan.clear();
+        for (KecamatanItem response:kecamatan) {
+            listIdKecamatan.add(response.getId());
+            listNamaKecamatan.add(response.getNama());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, listNamaKecamatan);
+        binding.dropdownKecamatan.setAdapter(arrayAdapter);
+
+        binding.dropdownKecamatan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                showDataKelurahan(listIdKecamatan.get(position));
+            }
+        });
+    }
+
+    private void showDataKelurahan(int id) {
+        Call<KelurahanResponse> client = APIConfigProvinsi.getApiService().getKelurahan(id);
+        client.enqueue(new Callback<KelurahanResponse>() {
+            @Override
+            public void onResponse(Call<KelurahanResponse> call, retrofit2.Response<KelurahanResponse> response) {
+                if (response.isSuccessful()){
+                    if (response.body() != null){
+                        setKelurahan(response.body().getKelurahan());
+                    }
+                }else {
+                    if (response.body() != null){
+                        Log.e(TAG, "onFailure: " + response.body().getKelurahan());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<KelurahanResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+    }
+
+    private void setKelurahan(List<KelurahanItem> kelurahan) {
+        listIdKelurahan.clear();
+        listNamaKelurahan.clear();
+        for (KelurahanItem response:kelurahan) {
+            listIdKelurahan.add((int) response.getId());
+            listNamaKelurahan.add(response.getNama());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, listNamaKelurahan);
+        binding.dropdownKelurahan.setAdapter(arrayAdapter);
+
+        binding.dropdownKelurahan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(Home.this, DataActivity.class);
-        startActivity(intent);
+        switch (view.getId()){
+            case R.id.btn_Document:
+                Intent intent = new Intent(Home.this, DataActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_submit:
+                boolean isEmptyFields = false;
+
+                if (TextUtils.isEmpty(binding.txtInputEditTextNama.getText().toString()) ||
+                        TextUtils.isEmpty(binding.txtInputEditTextNoHp.getText().toString()) ||
+                        TextUtils.isEmpty(binding.txtInputEditTextEmail.getText().toString()) ||
+                        TextUtils.isEmpty(binding.txtInputEditTextAlamat.getText().toString()) ||
+                        TextUtils.isEmpty(binding.dropdownProvinsi.getText().toString()) ||
+                        TextUtils.isEmpty(binding.dropdownKotaKabupaten.getText().toString()) ||
+                        TextUtils.isEmpty(binding.dropdownKecamatan.getText().toString()) ||
+                        TextUtils.isEmpty(binding.dropdownKelurahan.getText().toString()) ||
+                        TextUtils.isEmpty(binding.txtInputEditTextKodePos.getText().toString())){
+                    isEmptyFields = true;
+                    Toast toast = Toast.makeText(Home.this, "Field tidak boleh kosong", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                }else if (!isEmptyFields){
+                    postData(createVisitor());
+                }
+                break;
+        }
+    }
+
+    private void showLoading(Boolean state) {
+        if (state){
+            binding.progressBarHome.setVisibility(View.VISIBLE);
+        }else {
+            binding.progressBarHome.setVisibility(View.GONE);
+        }
     }
 }

@@ -16,9 +16,17 @@
         android:theme="@style/Theme.GuestBook"
         tools:targetApi="31">
         <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.NoToolbar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".DataActivity"
             android:exported="false"
-            android:theme="@style/Theme.NoToolbar"/>
+            android:theme="@style/Theme.NoToolbar" />
         <activity
             android:name=".Home"
             android:exported="false"
