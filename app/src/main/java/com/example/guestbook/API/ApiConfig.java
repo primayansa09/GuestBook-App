@@ -20,7 +20,7 @@ public class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.6:8085/")
+                .baseUrl("http://192.168.3.153:8085/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

@@ -9,6 +9,10 @@
 
     <include android:id="@+id/toolbar" layout="@layout/toolbar_home"/>
 
+    <include android:id="@+id/progress_dialog"
+        layout="@layout/progress_dialog"
+        android:visibility="gone"/>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -250,15 +254,27 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-    <ProgressBar
-        android:id="@+id/progressBarHome"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBarHome"-->
+<!--        style="?android:attr/progressBarStyle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--    <com.github.ybq.android.spinkit.SpinKitView-->
+<!--        android:id="@+id/progressBarHome"-->
+<!--        style="@style/SpinKitView.Circle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="40dp"-->
+<!--        app:SpinKit_Color="@color/orange"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:ignore="MissingClass"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

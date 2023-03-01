@@ -3,6 +3,7 @@ package com.example.guestbook;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.guestbook.API.APIConfigProvinsi;
 import com.example.guestbook.API.ApiConfig;
@@ -37,6 +39,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private ActivityHomeBinding binding;
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProvinsiViewModel provinsiViewModel;
+    NotificatiionCounter notificatiionCounter;
+//    private ProgressDialog progressDialog;
 
     ArrayList<Integer> listIdProvinsi = new ArrayList<>();
     ArrayList<String> listNamaProvinsi = new ArrayList<>();
@@ -58,8 +62,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
-        binding.toolbar.btnDocument.setOnClickListener(this);
+        binding.toolbar.imgDocument.setOnClickListener(this);
         binding.btnSubmit.setOnClickListener(this);
+
+        notificatiionCounter = new NotificatiionCounter(findViewById(R.id.notificationNumber));
 
         provinsiViewModel = new ViewModelProvider(this).get(ProvinsiViewModel.class);
         provinsiViewModel.getProvinsi().observe(this, provinsi ->{
@@ -67,8 +73,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 setProvinsi(provinsi);
             }
         });
-        removeField();
         showLoading(false);
+        showNotification(false);
     }
 
     private void postData(VisitorResultsItem visitorResultsItem) {
@@ -80,12 +86,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                showLoading(false);
                 if (response.isSuccessful()){
                     if (response.body() != null){
-                        removeField();
                         Toast toast = Toast.makeText(Home.this, "Save Berhasil", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
-                        toast.show();
-                    }else {
-                        Toast toast = Toast.makeText(Home.this, "Save Gagal", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
                         toast.show();
                     }
@@ -96,9 +97,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
            public void onFailure(Call<VisitorResponse> call, Throwable t) {
                showLoading(false);
                Log.e(TAG, "onFailure: " + t.getMessage());
-               Toast toast = Toast.makeText(Home.this, "Save Gagal", Toast.LENGTH_SHORT);
-               toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
-               toast.show();
+//               Toast toast = Toast.makeText(Home.this, "Save Gagal", Toast.LENGTH_SHORT);
+//               toast.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL,0,0);
+//               toast.show();
            }
        });
     }
@@ -279,9 +280,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btn_Document:
+            case R.id.img_document:
                 Intent intent = new Intent(Home.this, DataActivity.class);
                 startActivity(intent);
+                showNotification(false);
                 break;
             case R.id.btn_submit:
                 boolean isEmptyFields = false;
@@ -301,6 +303,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     toast.show();
                 }else if (!isEmptyFields){
                     postData(createVisitor());
+                    removeField();
+                    showNotification(true);
                 }
                 break;
         }
@@ -308,9 +312,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     private void showLoading(Boolean state) {
         if (state){
-            binding.progressBarHome.setVisibility(View.VISIBLE);
+//            binding.progressBarHome.setVisibility(View.VISIBLE);
+            binding.progressDialog.progressDialog.setVisibility(View.VISIBLE);
         }else {
-            binding.progressBarHome.setVisibility(View.GONE);
+//            binding.progressBarHome.setVisibility(View.GONE);
+            binding.progressDialog.progressDialog.setVisibility(View.GONE);
+        }
+    }
+
+    private void showNotification(boolean state) {
+        if (state){
+            binding.toolbar.notificationNumber.setVisibility(View.VISIBLE);
+            notificatiionCounter.increaseNumber();
+        }else {
+            binding.toolbar.notificationNumber.setVisibility(View.GONE);
+            binding.toolbar.txtNumberNotif.setText(String.valueOf(""));
         }
     }
 }
