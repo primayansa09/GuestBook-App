@@ -17,6 +17,8 @@ public class NotificatiionCounter {
         notification_number_counter++;
         if (notification_number_counter > MAX_NUMBER){
             Log.d("Counter","Maximum Number Reached!");
+        }else if (notification_number_counter > 0){
+            notificationCounter.clearComposingText();
         }else {
             notificationCounter.setText(String.valueOf(notification_number_counter));
         }

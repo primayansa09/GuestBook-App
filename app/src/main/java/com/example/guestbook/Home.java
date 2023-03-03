@@ -326,7 +326,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             notificatiionCounter.increaseNumber();
         }else {
             binding.toolbar.notificationNumber.setVisibility(View.GONE);
-            binding.toolbar.txtNumberNotif.setText(String.valueOf(""));
+            notificatiionCounter.increaseNumber();
         }
     }
 }
